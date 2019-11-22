@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2131 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2131.xml">
+<!ENTITY RFC2132 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2132.xml">
+<!ENTITY RFC4861 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4861.xml">
+<!ENTITY RFC6052 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6052.xml">
+<!ENTITY RFC6146 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6146.xml">
+<!ENTITY RFC6147 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6147.xml">
+<!ENTITY RFC6877 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6877.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc ipr="trust200902"
+     obsoletes=""
+     category="std"
+     docName="draft-link-dhc-v6only-00">
+
+  <!-- category values: std, bcp, info, exp, and historic -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+         full title is longer than 39 characters -->
+
+    <title>IPv6-Only-Capability Option for DHCP</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <author fullname="Lorenzo Colitti" initials="L." surname="Colitti">
+      <organization>Google</organization>
+
+      <address>
+	 <postal>
+          <street>Shibuya 3-21-3</street>
+          <city>Shibuya</city>
+          <region>Tokyo</region>
+          <code>150-0002</code>
+          <country>JP</country>
+        </postal>
+
+        <phone></phone>
+        <email>lorenzo@google.com</email>
+      </address>
+    </author>
+
+    <author fullname="Jen Linkova" initials="J." surname="Linkova">
+      <organization>Google</organization>
+
+      <address>
+        <postal>
+          <street>1 Darling Island Rd</street>
+          <city>Pyrmont</city>
+          <region>NSW</region>
+          <code>2009</code>
+          <country>AU</country>
+        </postal>
+
+        <phone></phone>
+        <email>furry@google.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+         in the current day for you. If only the current year is specified, xml2rfc will fill
+	 in the current day and month for you. If the year is not the current one, it is
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>Internet</area>
+
+    <workgroup>Dynamic Host Configuration</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.
+	 If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>template</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+	    <t>This document specifies a DHCP option to indicate that a DHCP client is willing to operate in IPv6-only mode
+		    and does not need an IPv4 address if the network provided IPv6-only services such as NAT64.
+	    </t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+
+	    <t> 
+		    One of the biggest challendges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of end hosts. Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are Ipv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed). At the same time some devices might still have IPv4-dependencies and need IPv4 connectivity to oeprate properly. To incrementaly rollout IPv6-only network operators  need to provide IPv4-as-a-service when a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile phones) are not allocated IPv4 addresses. Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
+		    <list style="symbols">
+			    <t>
+				    Doubling number of network segments which leads to operational complexity an performce impact (such as routers TCAM utilization due to increased number of ACL entries).
+			    </t>
+			    <t>
+				    Placing a host into correct network segment is problematic (in case of WiFi the user might select the wrong SSID. in the case of wired 802.1x authentication the authentication server might not have all information required to make the correct decision).
+			    </t>
+		    </list>
+	    </t>
+	    <t>
+		    Therefore it would be benefitial for IPv6 deployemnt if operators can implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices. The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well. The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivty (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
+	    </t>
+
+
+      <section title="Requirements Language">
+	        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+                        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+                        "OPTIONAL" in this document are to be interpreted as described in
+                        BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/>
+			when, and only when, they appear in all capitals, as shown here.</t>
+      </section>
+      <section title="Terminology">
+	      <t>
+		      IPv6-only capable host: a host which does not require IPv4 and can operate on Ipv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. 
+	      </t>
+	      <t>
+		      IPv4-as-a-Service: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in for receiving IPv4 addresses;
+	      </t>
+	      <t>
+		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity. Such deployment scenario allows operators to incrementaly turn off IPv4 on end hosts, still providing IPv4 to devices which require it to oeprate while IPv6-only capable devices are not assigned IPv4 addresses.
+	      </t>
+	      <t>
+		      NAT64: Network Address and Protocol Translation from IPv6 Clients to IPv4 Servers <xref target="RFC6146"/>;
+	      </t>
+	      <t>
+		      RA:    Router Advertisement, a message used by IPv6 routers to advertise their presence together
+		      with various link and Internet parameters <xref target="RFC4861"/>;
+	      </t>
+	      <t>
+		      DNS64: a mechanism for synthesizing AAAA records from A records <xref target="RFC6147"/>;
+	      </t>
+
+      </section>
+    </section>
+
+    <section title="Reasons to Signal IPv6-Only Support in DHCPv4 Packets">
+	    <t>
+		    For networks which contains both IPv6-capable and IPv4-requiring devices and utilizes DHCP for configuring IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on the given segment. Such approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
+	    </t>
+	    <t>
+		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message. 
+	    </t>
+    </section>
+
+    <section title="IPv6-Only Capability Option">
+
+    <section anchor="Format" title="Option format">
+	     <figure align="center" anchor="fig_Option"
+                             title="IPv6-Only Capabilty Option Format">
+			     <artwork align="center"><![CDATA[
+
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |     Type      |   Length      |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+				      ]]></artwork>
+		      </figure>
+
+		      <t>Fields:</t>
+		      <texttable style="none">
+			      <ttcol></ttcol>
+			      <ttcol></ttcol>
+
+			      <c>Type</c> <c>8-bit identifier of the IPv6-Only Capability option type as assigned by IANA: TBD</c>
+
+			      <c>Length</c> <c> 8-bit unsigned integer.  The length of the option (excluding the Type and Length Fields. The server MUST set the length field to 0. The receiver MUST ignore the  IPv6-Only Capability option if the the length field value is not 0. </c>
+				      <c></c><c></c>
+       </texttable>
+       </section>
+       <section anchor="v4client" title="DHCPv4 Client Behaviour">
+	       <t>
+		       DHCP client SHOULD allow a device administrator to configure IPv6-only capable mode either for a specific interface (to indicate that the device is IPv6-only capable if connected to a NAT64 network via that interface) or for all interfaces.
+		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-cabale for the purpose of sending/receiving DHCP packets over any other interfaces.
+	       </t>
+	       <t>
+		       Clients not capable to operate in IPv6-only NAT64 envinronment MUST NOT include the IPv6-only capability option in any DHCP packets and MUST ignore that option in packets received from DHCP servers. 
+	       </t>
+	       <t>
+		       IPv6-only capable clients SHOULD include the IPv6-only capability option into the Parameter Request List in DHCPDISCOVER messages.
+	       </t>
+	       <t>
+		       If the client did not include the IPv6-only capability option into the DHCPDISCOVER message it MUST ignore the the IPv6-only capability option in any messages received from the server.
+	       </t>
+	       <t>
+		       If the client includes the IPv6-only capability option into the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Capability option, the client MUST NOT configure an IPv4 address provided in the DHCPOFFER and SHOULD respond with DHCPDECLINE message to the server. The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
+	       </t>
+	       <t>
+		       If  the client includes the IPv6-only capability option into the Parameter Request List and the server responded with NACK message containing the  IPv6-only capability option the  SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
+	       </t>
+	       </section>
+       <section anchor="v4srv" title="DHCPv4 Server Behaviour">
+	       <t>
+		       The DHCP server SHOULD have a configuration option to mark the given DHCP pool as belonging to an IPv6-mostly network segment. 
+	       </t>
+	       <t>
+		       The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the YIADDR field in the message does not belong to a pool configured as IPv6-mostly.  The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the option was not present in the Parameter Request List sent by the client.
+	       </t>
+	       <t>
+		       If the IPv6-only capability option is present in the Parameter Request List received from the client and the corresponding DHCP pool is explicitly configured as belonging to an IPv6-mostly network segment, the server SHOULD respond with the DHPCOFFER message. If the pool is explicitly configured with a dedicated IPv4 address to be returned to IPv6-only capable clients the server MUST specify that address as the client's network address and MUST NOT verify its uniqueness. Otherwise the server SHOULD follow the recommendations in <xref target="RFC2131"/>. The client is not expected to use that IPv4 address so if the client responds with the DHCPREQUEST message for that address the server MUST respond with DHCPNAK. If no address is available, the server SHOULD  respond with DHCPNAK and SHOULD include the IPv6-only capability option. Including the option in the NACK packet prevents IPv6-only capable clients from retransmitting their requests and reduce unnessesary load on DHCP servers.
+	       </t>
+       </section>
+       <section anchor="v6srv" title="DHCPv6 Server Behaviour">
+	       <t>
+		       DHCPv6 servers MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
+	       </t>
+       </section>
+       <section anchor="v6client" title="DHCPv6 Client Behaviour">
+	       <t>
+		       DHCPv6 clients MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
+	       </t>
+       </section>
+            
+    </section>
+
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>The IANA is requested to assign a new DHCP Option type for the IPv6-Only Capabilty option defined in this document.</t>
+
+<texttable anchor="option_table">
+    <ttcol align="left">Option Name</ttcol>
+    <ttcol align="left">Type</ttcol>
+    <c>IPv6-only capability option</c>
+    <c>(TBD)</c>
+</texttable>
+
+      <t>The IANA registry for these options is:
+        <list><t>
+          <eref target="https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml#options">
+          BOOTP Vendor Extensions and DHCP Options</eref>
+      </t></list></t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+	    <t>
+		    The proposed mechanism is not introducing any new security implications. While clients using the IPv6-only capability option are vunerable to attacks related to a rogue DHCP server, enabling IPv6-only capability option does not provide an attacker with any additional mechanisms.
+	    </t>
+	    <t>
+		    It should be noted that disabling IPv4 on a host upon receiving the Ipv6-only capabilty option from the DHCP server protects the host from IPv4-related attacks and therefore could be considered a security feature.
+	    </t>
+    </section>
+    <section anchor="Acknowledgements" title="Acknowledgements">
+            <t>
+    </t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <references title="Normative References">
+      &RFC2119;
+      &RFC2131;
+      &RFC2132;
+      &RFC4861;
+      &RFC8174;
+    </references>
+
+    <references title="Informative References">
+      &RFC6052;
+      &RFC6146;
+      &RFC6147;
+      &RFC6877;
+    </references>
+
+  </back>
+</rfc>
