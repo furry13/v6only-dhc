@@ -134,7 +134,7 @@
   <middle>
     <section title="Introduction">
 
-	    <t> 
+	    <t>
 		    One of the biggest challendges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of end hosts. Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are Ipv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed). At the same time some devices might still have IPv4-dependencies and need IPv4 connectivity to oeprate properly. To incrementaly rollout IPv6-only network operators  need to provide IPv4-as-a-service when a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile phones) are not allocated IPv4 addresses. Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
 		    <list style="symbols">
 			    <t>
@@ -159,7 +159,7 @@
       </section>
       <section title="Terminology">
 	      <t>
-		      IPv6-only capable host: a host which does not require IPv4 and can operate on Ipv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. 
+		      IPv6-only capable host: a host which does not require IPv4 and can operate on Ipv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface.
 	      </t>
 	      <t>
 		      IPv4-as-a-Service: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in for receiving IPv4 addresses;
@@ -186,7 +186,7 @@
 		    For networks which contains both IPv6-capable and IPv4-requiring devices and utilizes DHCP for configuring IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on the given segment. Such approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
 	    </t>
 	    <t>
-		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message. 
+		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message.
 	    </t>
     </section>
 
@@ -197,7 +197,7 @@
                              title="IPv6-Only Capabilty Option Format">
 			     <artwork align="center"><![CDATA[
 
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |     Type      |   Length      |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -222,7 +222,7 @@
 		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-cabale for the purpose of sending/receiving DHCP packets over any other interfaces.
 	       </t>
 	       <t>
-		       Clients not capable to operate in IPv6-only NAT64 envinronment MUST NOT include the IPv6-only capability option in any DHCP packets and MUST ignore that option in packets received from DHCP servers. 
+		       Clients not capable to operate in IPv6-only NAT64 envinronment MUST NOT include the IPv6-only capability option in any DHCP packets and MUST ignore that option in packets received from DHCP servers.
 	       </t>
 	       <t>
 		       IPv6-only capable clients SHOULD include the IPv6-only capability option into the Parameter Request List in DHCPDISCOVER messages.
@@ -239,7 +239,7 @@
 	       </section>
        <section anchor="v4srv" title="DHCPv4 Server Behaviour">
 	       <t>
-		       The DHCP server SHOULD have a configuration option to mark the given DHCP pool as belonging to an IPv6-mostly network segment. 
+		       The DHCP server SHOULD have a configuration option to mark the given DHCP pool as belonging to an IPv6-mostly network segment.
 	       </t>
 	       <t>
 		       The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the YIADDR field in the message does not belong to a pool configured as IPv6-mostly.  The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the option was not present in the Parameter Request List sent by the client.
@@ -258,7 +258,7 @@
 		       DHCPv6 clients MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
 	       </t>
        </section>
-            
+
     </section>
 
 
