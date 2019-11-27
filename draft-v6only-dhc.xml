@@ -86,6 +86,17 @@
       </address>
     </author>
 
+    <author fullname="Michael C. Richardson" initials="M."
+            surname="Richardson">
+      <organization abbrev="Sandelman">Sandelman Software Works</organization>
+
+      <address>
+        <email>mcr+ietf@sandelman.ca</email>
+
+        <uri>http://www.sandelman.ca/</uri>
+      </address>
+    </author>
+
     <date/>
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
@@ -115,7 +126,7 @@
 
     <abstract>
 	    <t>This document specifies a DHCP option to indicate that a DHCP client is willing to operate in IPv6-only mode
-		    and does not need an IPv4 address if the network provided IPv6-only services such as NAT64.
+		    and does not need an IPv4 address if the network can provide access to IPv4 services via NAT64.
 	    </t>
     </abstract>
   </front>
@@ -123,11 +134,11 @@
   <middle>
     <section title="Introduction">
 
-	    <t> 
-		    One of the biggest challendges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of end hosts. Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are Ipv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed). At the same time some devices might still have IPv4-dependencies and need IPv4 connectivity to oeprate properly. To incrementaly rollout IPv6-only network operators  need to provide IPv4-as-a-service when a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile phones) are not allocated IPv4 addresses. Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
+	    <t>
+		    One of the biggest challendges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of end hosts. Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are IPv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed). At the same time some devices might still have IPv4-dependencies and need IPv4 connectivity to operate properly. To incrementaly rollout IPv6-only network operators  need to provide IPv4-as-a-service when a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile phones) are not allocated IPv4 addresses. Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
 		    <list style="symbols">
 			    <t>
-				    Doubling number of network segments which leads to operational complexity an performce impact (such as routers TCAM utilization due to increased number of ACL entries).
+				    Doubling number of network segments which leads to operational complexity and a performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
 			    </t>
 			    <t>
 				    Placing a host into correct network segment is problematic (in case of WiFi the user might select the wrong SSID. in the case of wired 802.1x authentication the authentication server might not have all information required to make the correct decision).
@@ -135,7 +146,7 @@
 		    </list>
 	    </t>
 	    <t>
-		    Therefore it would be benefitial for IPv6 deployemnt if operators can implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices. The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well. The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivty (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
+		    Therefore it would be beneficial for IPv6 deployment if operators can implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices. The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well. The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivty (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
 	    </t>
 
 
@@ -148,13 +159,13 @@
       </section>
       <section title="Terminology">
 	      <t>
-		      IPv6-only capable host: a host which does not require IPv4 and can operate on Ipv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. 
+		      IPv6-only capable host: a host which does not require IPv4 and can operate on IPv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface.
 	      </t>
 	      <t>
 		      IPv4-as-a-Service: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in for receiving IPv4 addresses;
 	      </t>
 	      <t>
-		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity. Such deployment scenario allows operators to incrementaly turn off IPv4 on end hosts, still providing IPv4 to devices which require it to oeprate while IPv6-only capable devices are not assigned IPv4 addresses.
+		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity. Such deployment scenario allows operators to incrementaly turn off IPv4 on end hosts, while still providing IPv4 to devices which require IPv4 to operate.  But, IPv6-only capable devices need not be assigned IPv4 addresses.
 	      </t>
 	      <t>
 		      NAT64: Network Address and Protocol Translation from IPv6 Clients to IPv4 Servers <xref target="RFC6146"/>;
@@ -175,7 +186,7 @@
 		    For networks which contains both IPv6-capable and IPv4-requiring devices and utilizes DHCP for configuring IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on the given segment. Such approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
 	    </t>
 	    <t>
-		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message. 
+		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message.
 	    </t>
     </section>
 
@@ -186,7 +197,7 @@
                              title="IPv6-Only Capabilty Option Format">
 			     <artwork align="center"><![CDATA[
 
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |     Type      |   Length      |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -208,10 +219,10 @@
        <section anchor="v4client" title="DHCPv4 Client Behaviour">
 	       <t>
 		       DHCP client SHOULD allow a device administrator to configure IPv6-only capable mode either for a specific interface (to indicate that the device is IPv6-only capable if connected to a NAT64 network via that interface) or for all interfaces.
-		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-cabale for the purpose of sending/receiving DHCP packets over any other interfaces.
+		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-capable for the purpose of sending/receiving DHCP packets over any other interfaces.
 	       </t>
 	       <t>
-		       Clients not capable to operate in IPv6-only NAT64 envinronment MUST NOT include the IPv6-only capability option in any DHCP packets and MUST ignore that option in packets received from DHCP servers. 
+		       Clients not capable to operate in IPv6-only NAT64 envinronment MUST NOT include the IPv6-only capability option in any DHCP packets and MUST ignore that option in packets received from DHCP servers.
 	       </t>
 	       <t>
 		       IPv6-only capable clients SHOULD include the IPv6-only capability option into the Parameter Request List in DHCPDISCOVER messages.
@@ -220,7 +231,7 @@
 		       If the client did not include the IPv6-only capability option into the DHCPDISCOVER message it MUST ignore the the IPv6-only capability option in any messages received from the server.
 	       </t>
 	       <t>
-		       If the client includes the IPv6-only capability option into the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Capability option, the client MUST NOT configure an IPv4 address provided in the DHCPOFFER and SHOULD respond with DHCPDECLINE message to the server. The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
+		       If the client includes the IPv6-only capability option into the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Capability option, the client MUST NOT configure the IPv4 address provided in the DHCPOFFER and SHOULD respond with DHCPDECLINE message to the server. The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
 	       </t>
 	       <t>
 		       If  the client includes the IPv6-only capability option into the Parameter Request List and the server responded with NACK message containing the  IPv6-only capability option the  SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
@@ -228,7 +239,7 @@
 	       </section>
        <section anchor="v4srv" title="DHCPv4 Server Behaviour">
 	       <t>
-		       The DHCP server SHOULD have a configuration option to mark the given DHCP pool as belonging to an IPv6-mostly network segment. 
+		       The DHCP server SHOULD have a configuration option to mark the given DHCP pool as belonging to an IPv6-mostly network segment.
 	       </t>
 	       <t>
 		       The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the YIADDR field in the message does not belong to a pool configured as IPv6-mostly.  The server MUST NOT include the IPv6-only capability option in the DHCPOFFER message if the option was not present in the Parameter Request List sent by the client.
@@ -247,7 +258,7 @@
 		       DHCPv6 clients MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
 	       </t>
        </section>
-            
+
     </section>
 
 
