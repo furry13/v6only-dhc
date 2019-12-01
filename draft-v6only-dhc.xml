@@ -146,7 +146,7 @@
 		    </list>
 	    </t>
 	    <t>
-		    Therefore it would be beneficial for IPv6 deployment if operators can implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices. The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well. The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivty (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
+		    Therefore it would be beneficial for IPv6 deployment if operators can implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices. The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well. The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivity (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
 	    </t>
 
 
@@ -159,7 +159,7 @@
       </section>
       <section title="Terminology">
 	      <t>
-		      IPv6-only capable host: a host which does not require IPv4 and can operate on IPv6-only network if the network provide NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface.
+		      IPv6-only capable host: a host which does not require IPv4 and can operate on IPv6-only network if the network provides NAT64 (with DNS64 if the host does not support local DNS64 synthesis). Strictly speaking IPv6-only capability is specific to a given interface of the host: if some applocation on a host require IPv4 and 464XLAT clat <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface.
 	      </t>
 	      <t>
 		      IPv4-as-a-Service: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in for receiving IPv4 addresses;
@@ -212,13 +212,13 @@
 
 			      <c>Type</c> <c>8-bit identifier of the IPv6-Only Capability option type as assigned by IANA: TBD</c>
 
-			      <c>Length</c> <c> 8-bit unsigned integer.  The length of the option (excluding the Type and Length Fields. The server MUST set the length field to 0. The receiver MUST ignore the  IPv6-Only Capability option if the the length field value is not 0. </c>
+			      <c>Length</c> <c> 8-bit unsigned integer.  The length of the option (excluding the Type and Length Fields). The server MUST set the length field to 0. The receiver MUST ignore the  IPv6-Only Capability option if the length field value is not 0. </c>
 				      <c></c><c></c>
        </texttable>
        </section>
        <section anchor="v4client" title="DHCPv4 Client Behaviour">
 	       <t>
-		       DHCP client SHOULD allow a device administrator to configure IPv6-only capable mode either for a specific interface (to indicate that the device is IPv6-only capable if connected to a NAT64 network via that interface) or for all interfaces.
+		       A DHCP client SHOULD allow a device administrator to configure IPv6-only capable mode either for a specific interface (to indicate that the device is IPv6-only capable if connected to a NAT64 network via that interface) or for all interfaces.
 		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-capable for the purpose of sending/receiving DHCP packets over any other interfaces.
 	       </t>
 	       <t>
@@ -231,7 +231,7 @@
 		       If the client did not include the IPv6-only capability option into the DHCPDISCOVER message it MUST ignore the the IPv6-only capability option in any messages received from the server.
 	       </t>
 	       <t>
-		       If the client includes the IPv6-only capability option into the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Capability option, the client MUST NOT configure the IPv4 address provided in the DHCPOFFER and SHOULD respond with DHCPDECLINE message to the server. The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
+		       If the client includes the IPv6-only capability option code in the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Capability option, the client MUST NOT configure the IPv4 address provided in the DHCPOFFER and SHOULD respond with DHCPDECLINE message to the server. The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
 	       </t>
 	       <t>
 		       If  the client includes the IPv6-only capability option into the Parameter Request List and the server responded with NACK message containing the  IPv6-only capability option the  SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachement event happens. The host MAY disable IPv4 stack until the network disconnection event heppens.
