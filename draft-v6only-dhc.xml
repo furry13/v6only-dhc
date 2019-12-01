@@ -186,7 +186,7 @@
 		    For networks which contains both IPv6-capable and IPv4-requiring devices and utilizes DHCP for configuring IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on the given segment. Such approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
 	    </t>
 	    <t>
-		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface. draft-ietf-6man-ipv6only-flag proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue Ipv6 router advertisement message.
+		    Administratively disabling IPv4 on IPv6-only capable hosts is not feasible as those hosts would lose network connectivity if connected to an IPv4-only network. As there is no reliable mechanism for a network to signal to hosts that the said network provides NAT64 services IPv6-only capable hosts can not reliably detect if it's safe to disable IPv4 on the corresponding network interface.  <xref target="I-D.ietf-6man-ipv6only-flag"/> proposed a new flag in IPv6 Router Advertisement <xref target="RFC4861"/> to indicate that a network segment is IPv6-Only. However such approach would allow a bad actor to disable IPv4 on hosts by sending a rougue IPv6 router advertisement message.
 	    </t>
     </section>
 
@@ -309,6 +309,7 @@
       &RFC6146;
       &RFC6147;
       &RFC6877;
+      <?rfc include="reference.I-D.ietf-6man-ipv6only-flag" ?>
     </references>
 
   </back>
