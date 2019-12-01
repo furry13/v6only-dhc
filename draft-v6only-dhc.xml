@@ -263,7 +263,11 @@
 
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>The IANA is requested to assign a new DHCP Option type for the IPv6-Only Capabilty option defined in this document.</t>
+      <t>The IANA is requested to assign a new DHCP Option code for the IPv6-Only Capability option
+      from the BOOTP Vendor Extensions and DHCP Options registry, located at
+      https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml#options .
+      If possible, please assign option code 108.
+      </t>
 
 <texttable anchor="option_table">
     <ttcol align="left">Option Name</ttcol>
@@ -272,11 +276,6 @@
     <c>(TBD)</c>
 </texttable>
 
-      <t>The IANA registry for these options is:
-        <list><t>
-          <eref target="https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml#options">
-          BOOTP Vendor Extensions and DHCP Options</eref>
-      </t></list></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
