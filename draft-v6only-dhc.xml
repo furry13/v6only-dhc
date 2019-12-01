@@ -262,16 +262,6 @@
 		       If the IPv6-only capability option is present in the Parameter Request List received from the client and the corresponding DHCP pool is explicitly configured as belonging to an IPv6-mostly network segment, the server SHOULD respond with the DHPCOFFER message. If the pool is explicitly configured with a dedicated IPv4 address to be returned to IPv6-only capable clients the server MUST specify that address as the client's network address and MUST NOT verify its uniqueness. Otherwise the server SHOULD follow the recommendations in <xref target="RFC2131"/>. The client is not expected to use that IPv4 address so if the client responds with the DHCPREQUEST message for that address the server MUST respond with DHCPNAK. If no address is available, the server SHOULD  respond with DHCPNAK and SHOULD include the IPv6-only capability option. Including the option in the NACK packet prevents IPv6-only capable clients from retransmitting their requests and reduce unnessesary load on DHCP servers.
 	       </t>
        </section>
-       <section anchor="v6srv" title="DHCPv6 Server Behaviour">
-	       <t>
-		       DHCPv6 servers MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
-	       </t>
-       </section>
-       <section anchor="v6client" title="DHCPv6 Client Behaviour">
-	       <t>
-		       DHCPv6 clients MUST ignore the IPv6-Only Capability option in received DHCPv6 packets. It MUST NOT include it into any DHCPv6 packets sent.
-	       </t>
-       </section>
 
     </section>
 
