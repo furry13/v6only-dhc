@@ -158,7 +158,7 @@
 		    Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
 		    <list style="symbols">
 			    <t>
-				    Doubling number of network segments which leads to operational complexity and a performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
+				    Doubling number of network segments which leads to operational complexity and performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
 			    </t>
 			    <t>
 				    Placing a host into correct network segment is problematic (in case of WiFi the user might select the wrong SSID. in the case of wired 802.1x authentication the authentication server might not have all information required to make the correct decision).
