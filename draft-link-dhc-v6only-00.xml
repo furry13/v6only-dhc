@@ -337,7 +337,7 @@
     <section anchor="Security" title="Security Considerations">
 	    <t>
 		    The proposed mechanism is not introducing any new security implications.
-		    While clients using the IPv6-only Preferred option are vunerable to attacks related to a rogue DHCP server, enabling IPv6-only capability option does not provide an attacker with any additional mechanisms.
+		    While clients using the IPv6-only Preferred option are vunerable to attacks related to a rogue DHCP server, enabling IPv6-only Preferred option does not provide an attacker with any additional mechanisms.
 	    </t>
 	    <t>
 		    It should be noted that disabling IPv4 on a host upon receiving the IPv6-only Preferred  option from the DHCP server protects the host from IPv4-related attacks and therefore could be considered a security feature.
