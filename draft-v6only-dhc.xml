@@ -166,7 +166,7 @@
 		    </list>
 	    </t>
 	    <t>
-		    Therefore it would be beneficial for IPv6 deployment if operators could implement IPv4-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices.
+		    Therefore it would be beneficial for IPv6 deployment if operators could implement IPv6-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices.
 		    The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well.
 		    While IPv6-only capable devices might use a heuristic approach to learning if the network provdes IPv6-only functionality and stop using IPv4 if it does, it might be practically undesirable.
 		    One important reason is that when a host connects to a network, it does not know if the network is IPv4-only, dual-stack or IPv6-only.
@@ -219,8 +219,8 @@
 		    Such approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
 	    </t>
 	    <t>
-		    Another benefit of using DHCPv4 for signalling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
-		    It allows IPv6-only capable clients to turn off IPv6 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise.
+		    Another benefit of using DHCPv4 for signaling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
+		    It allows IPv6-only capable clients to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise.
 	    </t>
 	    <t>
 		    Coexistence of IPv6-only, dual-stack and even IPv4-only hosts on the same LAN would not only allow network administrators to preserve scarce IPv4 addresses but would also drastically simplify incremental deployment of IPv6-only networks, positively impacting IPv6 adoption.
