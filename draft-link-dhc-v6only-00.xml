@@ -40,7 +40,7 @@
 <rfc ipr="trust200902"
      obsoletes=""
      category="std"
-     docName="draft-link-dhc-v6only-01">
+     docName="draft-link-dhc-v6only-00">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -174,6 +174,7 @@
 		    One important reason is that when a host connects to a network, it does not know if the network is IPv4-only, dual-stack or IPv6-only.
 		    To ensure that the connectivity over whatever protocol is present becomes available as soon as possible the host usually starts configuring both IPv4 and IPv6 immidiatelly.
 		    If hosts were to delay requesting IPv4 until IPv6 reachability is confirmed, that would penalize IPv4-only and dual-stack networks, which does not seem practical.
+		    Requesting IPv4 and then releasing it later, after IPv6 reachability is confirmed, might cause user-visible errors as it would be disruptive for applications which have started using the assigned IPv4 address already.
 		    Instead it would be useful to have a mechanism which would allow a host to indicate that IPv4 is optional and a network to signal that IPv6-only functionality (such as NAT64) is available.
 		    The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivity (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
 	    </t>
