@@ -228,6 +228,8 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	    <t>
 		    Another benefit of using DHCPv4 for signaling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
 		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise. 
+		    In addition, the proposed mechanism does not introduce any additional delays to the process of configuring IP stack on hosts.
+		    If the network does not support IPv6-only/IPv4-on-demand mode IPv6-only capable host would configure IPv4 address as quickly as on any other host.
 	    </t>
 	    <t>
 		    Coexistence of IPv6-only, dual-stack and even IPv4-only hosts on the same LAN would not only allow network administrators to preserve scarce IPv4 addresses but would also drastically simplify incremental deployment of IPv6-only networks, positively impacting IPv6 adoption.
