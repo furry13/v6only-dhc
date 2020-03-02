@@ -40,7 +40,7 @@
 <rfc ipr="trust200902"
      obsoletes=""
      category="std"
-     docName="draft-link-dhc-v6only-01">
+     docName="draft-ietf-dhc-v6only-00">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -153,30 +153,32 @@
 	    <t>
 		    One of the biggest challenges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of hosts.
 		    Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are IPv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed).
-		    At the same time some devices might still have IPv4 dependencies and need IPv4 connectivity to operate properly.
-		    To incrementally rollout IPv6-only, network operators need to provide IPv4-as-a-service whereby a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile devices) are not allocated IPv4 addresses.
-		    Deploying separate LAN segments for IPv6-only and for dual-stack hosts (such as two WiFi SSIDs or two VLANs) is undesirable for a number of reasons, including but not limited to:
+		    At the same time some devices might still have IPv4 dependencies and need IPv4 addresses to operate properly.
+		    To incrementally rollout IPv6-only, network operators might need to provide IPv4 on demand whereby a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile devices) are not allocated IPv4 addresses.
+Traditionally that goal is achieved by placing IPv6-only capable devices into a dedicated IPv6-only network segment or WiFi SSID, while dual-stack devices reside in another network with IPv4 and DHCP enabled.
+However such approach has a number of drawbacks, including but not limited to:
 		    <list style="symbols">
 			    <t>
-				    Doubling the number of network segments which leads to operational complexity and performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
+				    Doubling the number of network segments leads to operational complexity and performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
 			    </t>
 			    <t>
 				    Placing a host into the correct network segment is problematic.
 				    For example, in the case of 802.11 Wi-Fi the user might select the wrong SSID.
-				    In the case of wired 802.1x authentication the authentication server might not have all the information required to make the correct decision.
+				    In the case of wired 802.1x authentication the authentication server might not have all the information required to make the correct decision and choose between an IPv6-only and a dual-stack VLAN.
 			    </t>
 		    </list>
 	    </t>
 	    <t>
-		    It would be beneficial for IPv6 deployment if operators could implement IPv6-mostly (or IPv4-as-a-Service) segments where IPv6-only hosts co-exist with legacy dual-stack devices.
+		    It would be beneficial for IPv6 deployment if operators could implement IPv6-mostly (or IPv4-on-demand) segments where IPv6-only hosts co-exist with legacy dual-stack devices.
 		    The trivial solution of disabling IPv4 stack on IPv6-only capable hosts is not feasible as those clients must be able to operate on IPv4-only networks as well.
 		    While IPv6-only capable devices might use a heuristic approach to learning if the network provides IPv6-only functionality and stop using IPv4 if it does, it might be practically undesirable.
 		    One important reason is that when a host connects to a network, it does not know if the network is IPv4-only, dual-stack or IPv6-only.
 		    To ensure that the connectivity over whatever protocol is present becomes available as soon as possible the host usually starts configuring both IPv4 and IPv6 immediately.
 		    If hosts were to delay requesting IPv4 until IPv6 reachability is confirmed, that would penalize IPv4-only and dual-stack networks, which does not seem practical.
 		    Requesting IPv4 and then releasing it later, after IPv6 reachability is confirmed, might cause user-visible errors as it would be disruptive for applications which have started using the assigned IPv4 address already.
-		    Instead it would be useful to have a mechanism which would allow a host to indicate that IPv4 is optional and a network to signal that IPv6-only functionality (such as NAT64) is available.
-		    The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need IPv4 if the network provides IPv6-only connectivity (as NAT64 and DNS64).  If the particular network segment provides IPv4-as-a-service such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
+		    Instead it would be useful to have a mechanism which would allow a host to indicate that its request IPv4 is optional and a network to signal that IPv6-only functionality (such as NAT64) is available.
+		    The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need an IPv4 address if the network provides IPv6-only connectivity (as NAT64 and DNS64).
+If the particular network segment provides IPv4-on-demand such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
 	    </t>
 
       <section title="Requirements Language">
@@ -188,14 +190,14 @@
       </section>
       <section title="Terminology">
 	      <t>
-		      IPv6-only capable host: a host which does not require IPv4 and can operate on IPv6-only networks.
-		      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host require IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface.
+		      IPv6-only capable host: a host which does not require an IPv4 address and can operate on IPv6-only networks.
+		      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host require IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. 
 	      </t>
 	      <t>
-		      IPv4-as-a-Service: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in to receiving IPv4 addresses.
+		      IPv4-on-demand: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in to receiving IPv4 addresses.
 	      </t>
 	      <t>
-		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity.
+		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity and allows coexistence of IPv6-only, dual-stack and IPv4-only hosts on the same segment.
 		      Such deployment scenario allows operators to incrementally turn off IPv4 on end hosts, while still providing IPv4 to devices which require IPv4 to operate. 
 		      But, IPv6-only capable devices need not be assigned IPv4 addresses.
 	      </t>
@@ -225,7 +227,7 @@
 	    </t>
 	    <t>
 		    Another benefit of using DHCPv4 for signaling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
-		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise.
+		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise. 
 	    </t>
 	    <t>
 		    Coexistence of IPv6-only, dual-stack and even IPv4-only hosts on the same LAN would not only allow network administrators to preserve scarce IPv4 addresses but would also drastically simplify incremental deployment of IPv6-only networks, positively impacting IPv6 adoption.
