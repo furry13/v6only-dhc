@@ -331,7 +331,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If the server responds with the IPv6-only Preferred option and the V6ONLY_WAIT timer is configured for the pool, the server MUST copy the configured value to the IPv6-only Preferred option value field.
 		       Otherwise it MUST set the field to zero.
 		       The server SHOULD include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/> but SHOULD NOT reserve the address and SHOULD NOT verify its uniqueness.
-		       The client is not expected to use that IPv4 address so if the client responds with the DHCPREQUEST message for that address the server MAY respond with DHCPNAK.
+		       The client is not expected to use that IPv4 address. However if for some reason the client responds with the DHCPREQUEST message for that address the server SHOULD process such request normally.
 	       </t>
 	       <t>
 		       As an optional optimization an IPv6-mostly pool MAY be configured with a dedicated IPv4 address to be returned to IPv6-only capable clients.
