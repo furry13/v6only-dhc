@@ -3,6 +3,7 @@
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2131 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2131.xml">
 <!ENTITY RFC2132 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2132.xml">
+<!ENTITY RFC2563 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2563.xml">
 <!ENTITY RFC3927 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3927.xml">
 <!ENTITY RFC4039 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4039.xml">
 <!ENTITY RFC4861 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4861.xml">
@@ -283,10 +284,10 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If only a specific interface is configured as IPv6-only capable the DHCP client MUST NOT be considered as an IPv6-capable for the purpose of sending/receiving DHCP packets over any other interfaces.
 	       </t>
 	       <t>
-		       Clients not capable of operating in an IPv6-only NAT64 environment MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCP packets and MUST ignore that option in packets received from DHCP servers.
+		       If a host is not capable of operating in an IPv6-only NAT64 environment its DHCP client MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCP packets and MUST ignore that option in packets received from DHCP servers. 
 	       </t>
 	       <t>
-		       IPv6-only capable clients SHOULD include the IPv6-only Preferred option in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
+		       DHCP clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
 	       </t>
 	       <t>
 		       If the client did not include the IPv6-only Preferred option in the DHCPDISCOVER or DHCPREQUEST message it MUST ignore the IPv6-only Preferred  option in any messages received from the server.
@@ -338,6 +339,12 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	       <t>
 		       If a client includes both a Rapid-Commit option <xref target="RFC4039"/> and IPv6-Only Preferred option in the DHCPDISCOVER message the server SHOULD NOT honor the Rapid-Commit option if the response would contain the IPv6-only Preferred option to the client. It SHOULD instead respond with a DHCPOFFER so that the IP address does not need to be reserved for the client until the lease expires.
 	       </t>
+ <section anchor="autoconf" title="Interoperability with RFC2563">
+<t>
+<xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only and Auto-Configure options.
+The server administrators may use the Auto-Configure option to control IPv4 link-local address configuration on IPv6-only clients with <xref target="RFC2563"/> support by sedning DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag says "DoNotAutoConfigure".
+</t>
+</section>
        </section>
        <section anchor="vars" title="Configuration Variables">
 	       <texttable style="none">
@@ -347,7 +354,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 			      <c>V6ONLY_WAIT</c> <c>The minimum time the client SHOULD stop the DHCP configuration process for. MUST be no less than 300 seconds. Default: 1800 seconds</c>
 			      <c></c><c></c>
 			       </texttable>
-       </section>
+     </section>
 
     </section>
 
@@ -392,6 +399,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
     <references title="Normative References">
       &RFC2119;
       &RFC2131;
+      &RFC2563;
       &RFC3927;
       &RFC4861;
       &RFC4039;
