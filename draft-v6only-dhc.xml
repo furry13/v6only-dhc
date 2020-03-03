@@ -39,6 +39,7 @@
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
 <rfc ipr="trust200902"
+     updates="2563"
      obsoletes=""
      category="std"
      docName="draft-ietf-dhc-v6only-00">
@@ -318,7 +319,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	       </section>
        <section anchor="v4srv" title="DHCPv4 Server Behaviour">
 	       <t>
-		       The DHCP server SHOULD have a configuration option to configure the given DHCP pool with an IPv6-only preferred option.
+		       The DHCP server SHOULD be able to configure certain pools to include the IPv6-only preferred option in DHCP responses if the client included the option in the RPL.
 		       The DHCP server MAY have a configuration option to specify V6ONLY_WAIT timer for all or individual IPv6-mostly pools.
 	       </t>
 	       <t>
@@ -344,17 +345,27 @@ If the particular network segment provides IPv4-on-demand such clients would not
 <xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only and Auto-Configure options.
 If a client sends both IPv6-Only and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
 To achieve this the server needs to send DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag saying "DoNotAutoConfigure".
+</t>
+<t>
 However special care should be taken in a situation when a server supports both options and receives just IPv6-Only option from a client.
 Section 2.3 of <xref target="RFC2563"/> states that if no address is chosed for the host (which would be the case for IPv6-only capable clients on IPv6-mostly network) then:
 "If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered."
-Such behaviour would be undesirable for clients supporting IPv6-Only option.
+Such behaviour would be undesirable for clients supporting the IPv6-Only-Preferred option w/o supporting the Auto-Configure option as they would not receive any response from the server and would keep asking, instead of disabling DHCP for V6ONLY_WAIT second.
 Therefore the following update is proposed to Section 2.3 of <xref target="RFC2563"/>"
+</t>
 <t>
 OLD TEXT:
 </t>
 <t>
 ---
+</t>
+<t>
+However, if no address is chosen for the host, a few additional steps MUST be taken.
+</t>
+<t>
 If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered.
+</t>
+<t>
 ---
 </t>
 <t>
@@ -362,8 +373,15 @@ NEW TEXT:
 </t>
 <t>
 ---
+</t>
+<t>
+However, if no address is chosen for the host, a few additional steps MUST be taken.
+</t>
+<t>
 If the DHCPDISCOVER does not contain the Auto-Configure option and the IPv6-Only Preferred option is not present, it is not answered.
-If the DHCPDISCOVER does not contain the Auto-Configure option but contains the IPv6-Only Preferred option, it process as described in 
+If the DHCPDISCOVER does not contain the Auto-Configure option but contains the IPv6-Only Preferred option, the processing rules for the IPv6-Only Preferred option apply.
+</t>
+<t>
 ---
 </t>
 
@@ -380,6 +398,35 @@ If the DHCPDISCOVER does not contain the Auto-Configure option but contains the 
      </section>
 
     </section>
+<section anchor="v6onlydef" title="IPv6-Only Transition Technologies Considerations">
+<t>
+Until IPv6 adoption in the Internet reaches 100% comminication between an IPv6-only host and IPv4-only destination requires some form of transition mechanism deployed in the network.
+At the time of writing the only such mechanism is NAT64 <xref target="RFC6146"/>.
+Therefore the IPv6-only Preferred option is only send by hosts capable of operating on NAT64 networks.
+In a typical deployment scenario a network administrator would not configure the DHCP server to return the IPv6-only Preferred option unless the network provides NAT64 service.
+</t>
+<t>
+Hypothetically it is possible for multiple transition technologies to coexsit. In such scenario some form of negotiation would be required between a client and a server to ensure that the transition technology supported by the client is the one the network provides.
+However it seems unlikely that any new transition technology would arise and be widely adopted in any foreseable future. Therefore adding support for non-existing technologies seems to be suboptimal and the proposed mechanism implies that NAT64 is used to facilitate connectivity between IPv6 and IPv4.
+</t>
+
+<t>
+It should be also noted that declaring a host or (strictly speaking, a host interface) IPv6-only capable is a policy decision. For example,
+ <list style="symbols">
+<t>
+An operating system vendor may make such decision and configure their DHCP clients to send the IPv6-Only Preferred option by default if the OS has 464XLAT CLAT <xref target="RFC6877"/> enabled. 
+</t>
+<t>
+An enterprise network administrator may provision the corporate hosts as IPv6-only capable if all applications users are supposed to run have been tested in IPv6-only envinronment (or if 464XLAT CLAT is enabled on the devices).
+</t>
+<t>
+IoT devices may be shipped in IPv6-only capable mode if they are designed to connect to IPv6-enabled cloud destination only. 
+</t>
+</list>
+
+</t>
+
+</section>
 
 
     <section anchor="IANA" title="IANA Considerations">
