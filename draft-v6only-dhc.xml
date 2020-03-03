@@ -342,8 +342,31 @@ If the particular network segment provides IPv4-on-demand such clients would not
  <section anchor="autoconf" title="Interoperability with RFC2563">
 <t>
 <xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only and Auto-Configure options.
-The server administrators may use the Auto-Configure option to control IPv4 link-local address configuration on IPv6-only clients with <xref target="RFC2563"/> support by sedning DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag says "DoNotAutoConfigure".
+If a client sends both IPv6-Only and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
+To achieve this the server needs to send DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag saying "DoNotAutoConfigure".
+However special care should be taken in a situation when a server supports both options and receives just IPv6-Only option from a client.
+Section 2.3 of <xref target="RFC2563"/> states that if no address is chosed for the host (which would be the case for IPv6-only capable clients on IPv6-mostly network) then:
+"If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered."
+Such behaviour would be undesirable for clients supporting IPv6-Only option.
+Therefore the following update is proposed to Section 2.3 of <xref target="RFC2563"/>"
+<t>
+OLD TEXT:
 </t>
+<t>
+---
+If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered.
+---
+</t>
+<t>
+NEW TEXT:
+</t>
+<t>
+---
+If the DHCPDISCOVER does not contain the Auto-Configure option and the IPv6-Only Preferred option is not present, it is not answered.
+If the DHCPDISCOVER does not contain the Auto-Configure option but contains the IPv6-Only Preferred option, it process as described in 
+---
+</t>
+
 </section>
        </section>
        <section anchor="vars" title="Configuration Variables">
