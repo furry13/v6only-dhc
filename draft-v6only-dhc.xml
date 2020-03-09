@@ -154,14 +154,13 @@
 
 	    <t>
 		    One of the biggest challenges of deploying IPv6-only LANs is that such networks might contain rather heterogeneous collection of hosts.
-		    Some of them are capable of operating in IPv6-only mode (either because the OS and all applications are IPv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed).
-		    At the same time some devices might still have IPv4 dependencies and need IPv4 addresses to operate properly.
-		    To incrementally rollout IPv6-only, network operators might need to provide IPv4 on demand whereby a host receives an IPv4 address if it needs it, while IPv6-only capable devices (such as modern mobile devices) are not allocated IPv4 addresses.
+		    While some hosts are capable of operating in IPv6-only mode (either because the OS and all applications are IPv6-only capable or because the host has some form of 464XLAT <xref target="RFC6877"/> deployed), others might still have IPv4 dependencies and need IPv4 addresses to operate properly.
+		    To incrementally rollout IPv6-only, network operators might need to provide IPv4 on demand whereby a host receives an IPv4 address if it needs it, while IPv6-only capable hosts (such as modern mobile devices) are not allocated IPv4 addresses.
 Traditionally that goal is achieved by placing IPv6-only capable devices into a dedicated IPv6-only network segment or WiFi SSID, while dual-stack devices reside in another network with IPv4 and DHCP enabled.
 However such approach has a number of drawbacks, including but not limited to:
 		    <list style="symbols">
 			    <t>
-				    Doubling the number of network segments leads to operational complexity and performance impact, for instance due to TCAM utilization increase from an increased number of ACL entries.
+				    Doubling the number of network segments leads to operational complexity and performance impact, for instance due to high memory utilization caused by an increased number of ACL entries.
 			    </t>
 			    <t>
 				    Placing a host into the correct network segment is problematic.
@@ -178,7 +177,7 @@ However such approach has a number of drawbacks, including but not limited to:
 		    To ensure that the connectivity over whatever protocol is present becomes available as soon as possible the host usually starts configuring both IPv4 and IPv6 immediately.
 		    If hosts were to delay requesting IPv4 until IPv6 reachability is confirmed, that would penalize IPv4-only and dual-stack networks, which does not seem practical.
 		    Requesting IPv4 and then releasing it later, after IPv6 reachability is confirmed, might cause user-visible errors as it would be disruptive for applications which have started using the assigned IPv4 address already.
-		    Instead it would be useful to have a mechanism which would allow a host to indicate that its request IPv4 is optional and a network to signal that IPv6-only functionality (such as NAT64) is available.
+		    Instead it would be useful to have a mechanism which would allow a host to indicate that its request for an IPv4 address is optional and a network to signal that IPv6-only functionality (such as NAT64) is available.
 		    The proposed solution is to introduce a new DHCP option which a client uses to indicate that it does not need an IPv4 address if the network provides IPv6-only connectivity (as NAT64 and DNS64).
 If the particular network segment provides IPv4-on-demand such clients would not be supplied  with IPv4 addresses, while on IPv4-only or dual-stack segments without NAT64 services IPv4 addresses will be provided.
 	    </t>
@@ -209,14 +208,14 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		      IPv6-Only network usually provides access to IPv4-only resources via NAT64 <xref target="RFC6147"/>.
 	      </t>
 	      <t>
-		      NAT64: Network Address and Protocol Translation from IPv6 Clients to IPv4 Servers <xref target="RFC6146"/>;
+		      NAT64: Network Address and Protocol Translation from IPv6 Clients to IPv4 Servers <xref target="RFC6146"/>.
 	      </t>
 	      <t>
 		      RA:    Router Advertisement, a message used by IPv6 routers to advertise their presence together
-		      with various link and Internet parameters <xref target="RFC4861"/>;
+		      with various link and Internet parameters <xref target="RFC4861"/>.
 	      </t>
 	      <t>
-		      DNS64: a mechanism for synthesizing AAAA records from A records <xref target="RFC6147"/>;
+		      DNS64: a mechanism for synthesizing AAAA records from A records <xref target="RFC6147"/>.
 	      </t>
 
       </section>
@@ -224,14 +223,14 @@ If the particular network segment provides IPv4-on-demand such clients would not
 
     <section title="Reasons to Signal IPv6-Only Support in DHCPv4 Packets">
 	    <t>
-		    For networks which contain both IPv6-capable and IPv4-requiring devices and utilize DHCP for configuring IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
+		    For networks which contain both IPv6-capable and IPv4-requiring devices and utilize DHCP for configuring the IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
 		    Such an approach limits the attack surface to DHCP-related attacks without introducing new vulnerable elements.
 	    </t>
 	    <t>
 		    Another benefit of using DHCPv4 for signaling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
 		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise. 
 		    In addition, the proposed mechanism does not introduce any additional delays to the process of configuring IP stack on hosts.
-		    If the network does not support IPv6-only/IPv4-on-demand mode IPv6-only capable host would configure IPv4 address as quickly as on any other host.
+		    If the network does not support IPv6-only/IPv4-on-demand mode, an IPv6-only capable host would configure an IPv4 address as quickly as on any other host.
 	    </t>
 	    <t>
 		    Coexistence of IPv6-only, dual-stack and even IPv4-only hosts on the same LAN would not only allow network administrators to preserve scarce IPv4 addresses but would also drastically simplify incremental deployment of IPv6-only networks, positively impacting IPv6 adoption.
@@ -250,7 +249,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
   0                   1                   2                   3
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |     Type      |   Length      |           Value               |
+ |     Code      |   Length      |           Value               |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |         Value (contd)         |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -263,15 +262,15 @@ If the particular network segment provides IPv4-on-demand such clients would not
                               <ttcol></ttcol>
                               <ttcol></ttcol>
 
-                              <c>Type</c> <c>8-bit identifier of the IPv6-Only Preferred option type as assigned by IANA: TBD</c>
+                              <c>Code</c> <c>8-bit identifier of the IPv6-Only Preferred option type as assigned by IANA: TBD</c>
 
-                              <c>Length</c> <c> 8-bit unsigned integer.  The length of the option excluding the Type and Length Fields.  The server MUST set the length field to 4. The receiver MUST ignore the IPv6-Only Preferred option if the length field value is not 4.</c>
+                              <c>Length</c> <c> 8-bit unsigned integer.  The length of the option excluding the Code and Length Fields.  The server MUST set the length field to 4. The receiver MUST ignore the IPv6-Only Preferred option if the length field value is not 4.</c>
 			      <c>Value</c>
 			      <c> 
 				      32-bit unsigned integer.
 				      The number of seconds the client should disable DHCPv4 for (V6ONLY_WAIT configuration variable).
-				      If the server pool is explicitly conifgured with V6ONLY_WAIT timer the server MUST set the field to that configured value. Otherwise the server MUST set it to zero.
-				      The client MUST ignore V6ONLY_WAIT timer received from the server if the value is less than 300 seconds.
+				      If the server pool is explicitly configured with a V6ONLY_WAIT timer the server MUST set the field to that configured value. Otherwise the server MUST set it to zero.
+				      The client MUST ignore V6ONLY_WAIT timer received from the server if the value is less than MIN_V6ONLY_WAIT.
 			      </c>
                               <c></c><c></c>
        </texttable>
@@ -288,20 +287,20 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If a host is not capable of operating in an IPv6-only NAT64 environment its DHCP client MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCP packets and MUST ignore that option in packets received from DHCP servers. 
 	       </t>
 	       <t>
-		       DHCP clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
+		       DHCP clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option code in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
 	       </t>
 	       <t>
-		       If the client did not include the IPv6-only Preferred option in the DHCPDISCOVER or DHCPREQUEST message it MUST ignore the IPv6-only Preferred  option in any messages received from the server.
+		       If the client did not include the IPv6-only Preferred option code in the Parameter Request List option in the DHCPDISCOVER or DHCPREQUEST message it MUST ignore the IPv6-only Preferred  option in any messages received from the server.
 	       </t>
 	       <t>
 		       If the client includes the IPv6-only Preferred option in the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Preferred option, the client MUST NOT configure the IPv4 address provided in the DHCPOFFER.
-		       If the IPv6-only Preferred option returned by the server contains non-zero value the client SHOULD set the V6ONLY_WAIT timer to that value.
-		       If the server returns zero value the client MUST use its own configuration for V6ONLY_WAIT timer.
+		       If the IPv6-only Preferred option returned by the server contains non-zero value greater or equal to MIN_V6ONLY_WAIT, the client SHOULD set the V6ONLY_WAIT timer to that value.
+		       Otherwise, the client MUST use its own configuration for V6ONLY_WAIT timer.
 		       The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachment event happens.
-		       The host MAY disable IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
+		       The host MAY disable the IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
 	       </t>
 	       <t>
-		       The client SHOULD include the IPv6-only Preferred option in DHCPREQUEST messages (after receiving a DHCPOFFER without this option, for a INIT-REBOOT, or when renewing or rebinding a leased address).
+		       The client SHOULD include the IPv6-only Preferred option in the Parameter Request List option in DHCPREQUEST messages (after receiving a DHCPOFFER without this option, for a INIT-REBOOT, or when renewing or rebinding a leased address).
 		       If the DHCP server responds with a DHCPACK that includes the IPv6-only Preferred option, the client MAY send a DHCPRELEASE message and MAY either stop the DHCP configuration process or disable IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
 		       Alternatively the client MAY continue to use the assigned IPv4 address until further DHCP reconfiguration events.
 	       </t>
@@ -313,13 +312,15 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       A client MAY use the presence of the IPv6-only Preferred option as a selection criteria.
 	       </t>
 	       <t>
-		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configure IPv4 link-local address <xref target="RFC3927"/>. 
-		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link.
+		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configure IPv4 link-local address <xref target="RFC3927"/>.
+		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link. 
+		       The Auto-Configure Option <xref target="RFC2563"/> can be used to control IPv4 link-local addresses autoconfiguration.
+		       <xref target="autoconf"/> discusses interoperability between the IPv6-only Preferred and the Auto-Configure options.
 	       </t>
 	       </section>
        <section anchor="v4srv" title="DHCPv4 Server Behaviour">
 	       <t>
-		       The DHCP server SHOULD be able to configure certain pools to include the IPv6-only preferred option in DHCP responses if the client included the option in the RPL.
+		       The DHCP server SHOULD be able to configure certain pools to include the IPv6-only preferred option in DHCP responses if the client included the option code in the Parameter Request List option.
 		       The DHCP server MAY have a configuration option to specify V6ONLY_WAIT timer for all or individual IPv6-mostly pools.
 	       </t>
 	       <t>
@@ -330,27 +331,26 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If the IPv6-only Preferred option is present in the Parameter Request List received from the client and the corresponding DHCP pool is explicitly configured as belonging to an IPv6-mostly network segment, the server MUST include the IPv6-only Preferred option when responding with the DHCPOFFER or DHCPACK message.
 		       If the server responds with the IPv6-only Preferred option and the V6ONLY_WAIT timer is configured for the pool, the server MUST copy the configured value to the IPv6-only Preferred option value field.
 		       Otherwise it MUST set the field to zero.
-		       The server SHOULD include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/> but SHOULD NOT reserve the address and SHOULD NOT verify its uniqueness.
-		       The client is not expected to use that IPv4 address. However if for some reason the client responds with the DHCPREQUEST message for that address the server SHOULD process such request normally.
+
+		       The server SHOULD not assign an address for the pool and return 0.0.0.0 as the offered address.
+		       Alternatively, the server MAY include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/> but SHOULD NOT reserve the address and SHOULD NOT verify its uniqueness.
+		       The client MUST NOT use that IPv4 address.
 	       </t>
 	       <t>
-		       As an optional optimization an IPv6-mostly pool MAY be configured with a dedicated IPv4 address to be returned to IPv6-only capable clients.
-		       In that case the server SHOULD specify that address as the client's network address and MUST NOT verify its uniqueness.
-	       </t>
-	       <t>
-		       If a client includes both a Rapid-Commit option <xref target="RFC4039"/> and IPv6-Only Preferred option in the DHCPDISCOVER message the server SHOULD NOT honor the Rapid-Commit option if the response would contain the IPv6-only Preferred option to the client. It SHOULD instead respond with a DHCPOFFER so that the IP address does not need to be reserved for the client until the lease expires.
+		       If a client includes both a Rapid-Commit option <xref target="RFC4039"/> and IPv6-Only Preferred option in the DHCPDISCOVER message the server SHOULD NOT honor the Rapid-Commit option if the response would contain the IPv6-only Preferred option to the client.
+		       It SHOULD instead respond with a DHCPOFFER as indicated above.
 	       </t>
  <section anchor="autoconf" title="Interoperability with RFC2563">
 <t>
-<xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only and Auto-Configure options.
-If a client sends both IPv6-Only and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
+<xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only Preferred and Auto-Configure options.
+If a client sends both IPv6-Only Preferred and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
 To achieve this the server needs to send DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag saying "DoNotAutoConfigure".
 </t>
 <t>
-However special care should be taken in a situation when a server supports both options and receives just IPv6-Only option from a client.
-Section 2.3 of <xref target="RFC2563"/> states that if no address is chosed for the host (which would be the case for IPv6-only capable clients on IPv6-mostly network) then:
+However special care should be taken in a situation when a server supports both options and receives just IPv6-Only Preferred option from a client.
+Section 2.3 of <xref target="RFC2563"/> states that if no address is chosen for the host (which would be the case for IPv6-only capable clients on IPv6-mostly network) then:
 "If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered."
-Such behaviour would be undesirable for clients supporting the IPv6-Only-Preferred option w/o supporting the Auto-Configure option as they would not receive any response from the server and would keep asking, instead of disabling DHCP for V6ONLY_WAIT second.
+Such behaviour would be undesirable for clients supporting the IPv6-Only Preferred option w/o supporting the Auto-Configure option as they would not receive any response from the server and would keep asking, instead of disabling DHCP for V6ONLY_WAIT second.
 Therefore the following update is proposed to Section 2.3 of <xref target="RFC2563"/>"
 </t>
 <t>
@@ -387,12 +387,12 @@ If the DHCPDISCOVER does not contain the Auto-Configure option but contains the 
 
 </section>
        </section>
-       <section anchor="vars" title="Configuration Variables">
+       <section anchor="vars" title="Constants and Configuration Variables">
 	       <texttable style="none">
                               <ttcol></ttcol>
-                              <ttcol></ttcol>
-
-			      <c>V6ONLY_WAIT</c> <c>The minimum time the client SHOULD stop the DHCP configuration process for. MUST be no less than 300 seconds. Default: 1800 seconds</c>
+			      <ttcol></ttcol>
+			      <c>V6ONLY_WAIT</c> <c>The minimum time the client SHOULD stop the DHCP configuration process for. MUST be no less than MIN_V6ONLY_WAIT seconds. Default: 1800 seconds</c>
+			      <c>MIN_V6ONLY_WAIT</c> <c>The lower boundary for V6ONLY_WAIT. Value: 300 seconds</c>
 			      <c></c><c></c>
 			       </texttable>
      </section>
@@ -400,14 +400,14 @@ If the DHCPDISCOVER does not contain the Auto-Configure option but contains the 
     </section>
 <section anchor="v6onlydef" title="IPv6-Only Transition Technologies Considerations">
 <t>
-Until IPv6 adoption in the Internet reaches 100% comminication between an IPv6-only host and IPv4-only destination requires some form of transition mechanism deployed in the network.
+Until IPv6 adoption in the Internet reaches 100% communication between an IPv6-only host and IPv4-only destination requires some form of transition mechanism deployed in the network.
 At the time of writing the only such mechanism is NAT64 <xref target="RFC6146"/>.
-Therefore the IPv6-only Preferred option is only send by hosts capable of operating on NAT64 networks.
+Therefore the IPv6-only Preferred option is only sent by hosts capable of operating on NAT64 networks.
 In a typical deployment scenario a network administrator would not configure the DHCP server to return the IPv6-only Preferred option unless the network provides NAT64 service.
 </t>
 <t>
-Hypothetically it is possible for multiple transition technologies to coexsit. In such scenario some form of negotiation would be required between a client and a server to ensure that the transition technology supported by the client is the one the network provides.
-However it seems unlikely that any new transition technology would arise and be widely adopted in any foreseable future. Therefore adding support for non-existing technologies seems to be suboptimal and the proposed mechanism implies that NAT64 is used to facilitate connectivity between IPv6 and IPv4.
+Hypothetically it is possible for multiple transition technologies to coexist. In such scenario some form of negotiation would be required between a client and a server to ensure that the transition technology supported by the client is the one the network provides.
+However it seems unlikely that any new transition technology would arise and be widely adopted in any foreseeable future. Therefore adding support for non-existing technologies seems to be suboptimal and the proposed mechanism implies that NAT64 is used to facilitate connectivity between IPv6 and IPv4.
 </t>
 
 <t>
@@ -417,7 +417,7 @@ It should be also noted that declaring a host or (strictly speaking, a host inte
 An operating system vendor may make such decision and configure their DHCP clients to send the IPv6-Only Preferred option by default if the OS has 464XLAT CLAT <xref target="RFC6877"/> enabled. 
 </t>
 <t>
-An enterprise network administrator may provision the corporate hosts as IPv6-only capable if all applications users are supposed to run have been tested in IPv6-only envinronment (or if 464XLAT CLAT is enabled on the devices).
+An enterprise network administrator may provision the corporate hosts as IPv6-only capable if all applications users are supposed to run have been tested in IPv6-only environment (or if 464XLAT CLAT is enabled on the devices).
 </t>
 <t>
 IoT devices may be shipped in IPv6-only capable mode if they are designed to connect to IPv6-enabled cloud destination only. 
@@ -438,7 +438,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 
 <texttable anchor="option_table">
     <ttcol align="left">Option Name</ttcol>
-    <ttcol align="left">Type</ttcol>
+    <ttcol align="left">Code</ttcol>
     <c>IPv6-only Preferred option</c>
     <c>(TBD)</c>
 </texttable>
@@ -457,7 +457,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
     <section anchor="Acknowledgements" title="Acknowledgements">
 	    <t>
 
-		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Bboucadair, Bjorn Mork, Bernie Volz (AI: add more names here).
+		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Ted Lemon, Roy Marples, Bjorn Mork, Bernie Volz (AI: add more names here).
 		    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts.
     </t>
     </section>
