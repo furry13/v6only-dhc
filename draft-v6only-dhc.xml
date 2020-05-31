@@ -298,13 +298,13 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	       </t>
 	       <t>
 			       If the client includes the IPv6-only Preferred option in the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Preferred option, the client SHOULD NOT request the IPv4 address provided in the DHCPOFFER.
-		       If the IPv6-only Preferred option returned by the server contains non-zero value greater or equal to MIN_V6ONLY_WAIT, the client SHOULD set the V6ONLY_WAIT timer to that value.
+		       If the IPv6-only Preferred option returned by the server contains a value greater or equal to MIN_V6ONLY_WAIT, the client SHOULD set the V6ONLY_WAIT timer to that value.
 		       Otherwise, the client SHOULD set the V6ONLY_WAIT timer to MIN_V6ONLY_WAIT.
 		       The client SHOULD stop the DHCP configuration process for at least V6ONLY_WAIT seconds or until a network attachment event happens.
 		       The host MAY disable the IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
 	       </t>
 	       <t>
-		       The client SHOULD include the IPv6-only Preferred option in the Parameter Request List option in DHCPREQUEST messages (after receiving a DHCPOFFER without this option, for a INIT-REBOOT, or when renewing or rebinding a leased address).
+		       The IPv6-only Preferred option SHOULD be included in the Parameter Request List option in DHCPREQUEST messages (after receiving a DHCPOFFER without this option, for a INIT-REBOOT, or when renewing or rebinding a leased address).
 		       If the DHCP server responds with a DHCPACK that includes the IPv6-only Preferred option, the client MAY send a DHCPRELEASE message and MAY either stop the DHCP configuration process or disable IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
 		       Alternatively the client MAY continue to use the assigned IPv4 address until further DHCP reconfiguration events.
 	       </t>
@@ -319,7 +319,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configure IPv4 link-local address <xref target="RFC3927"/>.
 		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link. 
 		       The Auto-Configure Option <xref target="RFC2563"/> can be used to control IPv4 link-local addresses autoconfiguration.
-		       <xref target="autoconf"/> discusses interoperability between the IPv6-only Preferred and the Auto-Configure options.
+		       <xref target="autoconf"/> discusses the interaction between the IPv6-only Preferred and the Auto-Configure options.
 	       </t>
 	       </section>
        <section anchor="v4srv" title="DHCPv4 Server Behavior">
@@ -347,7 +347,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If a client includes both a Rapid-Commit option <xref target="RFC4039"/> and IPv6-Only Preferred option in the DHCPDISCOVER message the server SHOULD NOT honor the Rapid-Commit option if the response would contain the IPv6-only Preferred option to the client.
 		       It SHOULD instead respond with a DHCPOFFER as indicated above.
 	       </t>
- <section anchor="autoconf" title="Interoperability with RFC2563">
+ <section anchor="autoconf" title="Interaction with RFC2563">
 <t>
 <xref target="RFC2563"/> defines an Auto-Configure DHCP option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only Preferred and Auto-Configure options.
 If a client sends both IPv6-Only Preferred and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
