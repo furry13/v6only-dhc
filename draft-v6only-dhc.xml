@@ -38,11 +38,11 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc ipr="trust200902"
+<rfc ipr="pre5378Trust200902"
      updates="2563"
      obsoletes=""
      category="std"
-     docName="draft-ietf-dhc-v6only-02">
+     docName="draft-ietf-dhc-v6only-03">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -144,7 +144,7 @@
 
     <abstract>
 	    <t>
-			    This document specifies a DHCPv4 option to indicate that a host supports an IPv6-only mode and willing to forgo obtaining an IPv4 address if the network provides IPv6 connectivity. It also updates <xref target="RFC2563"/> to specify the DHCPv4 server behavior when the server receives a DHCPDISCOVER not containing the Auto-Configure option.
+			    This document specifies a DHCPv4 option to indicate that a host supports an IPv6-only mode and willing to forgo obtaining an IPv4 address if the network provides IPv6 connectivity. It also updates [RFC2563] to specify the DHCPv4 server behavior when the server receives a DHCPDISCOVER not containing the Auto-Configure option.
 	    </t>
     </abstract>
   </front>
@@ -338,7 +338,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If the server responds with the IPv6-only Preferred option and the V6ONLY_WAIT timer is configured for the pool, the server MUST copy the configured value to the IPv6-only Preferred option value field.
 		       Otherwise it MUST set the field to zero.
 
-		       The server SHOULD not assign an address for the pool.
+		       The server SHOULD NOT assign an address for the pool.
 		       Instead it SHOULD return 0.0.0.0 as the offered address.
 			       Alternatively, the server MAY include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/>.
 				       In this case, the offered address MUST be a valid address that is not committed to any other client.
