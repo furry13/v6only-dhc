@@ -38,11 +38,11 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc ipr="pre5378Trust200902"
+<rfc ipr="trust200902"
      updates="2563"
      obsoletes=""
      category="std"
-     docName="draft-ietf-dhc-v6only-03">
+     docName="draft-ietf-dhc-v6only-04">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -230,7 +230,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 
     <section title="Reasons to Signal IPv6-Only Support in DHCPv4 Packets">
 	    <t>
-			    For networks which contain both IPv6-only capable and IPv4-requiring hosts and utilize DHCPv4 for configuring the IPv4 network stack on hosts, it seems only natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
+			    For networks which contain both IPv6-only capable and IPv4-requiring hosts and utilize DHCPv4 for configuring the IPv4 network stack on hosts, it seems natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
 			    An ability to remotely disable IPv4 on a host can be seen as a new denial-of-service attack vector.
 			    The proposed approach limits the attack surface to DHCPv4-related attacks without introducing new vulnerable elements.
 	    </t>
@@ -360,7 +360,7 @@ To achieve this the server needs to send DHCPOFFER which contains a 'yiaddr' of 
 However special care should be taken in a situation when a server supports both options and receives just IPv6-Only Preferred option from a client.
 Section 2.3 of <xref target="RFC2563"/> states that if no address is chosen for the host (which would be the case for IPv6-only capable clients on IPv6-mostly network) then:
 "If the DHCPDISCOVER does not contain the Auto-Configure option, it is not answered."
-Such behavior would be undesirable for clients supporting the IPv6-Only Preferred option w/o supporting the Auto-Configure option as they would not receive any response from the server and would keep asking, instead of disabling DHCPv4 for V6ONLY_WAIT second.
+Such behavior would be undesirable for clients supporting the IPv6-Only Preferred option w/o supporting the Auto-Configure option as they would not receive any response from the server and would keep asking, instead of disabling DHCPv4 for V6ONLY_WAIT seconds.
 Therefore the following update is proposed to Section 2.3 of <xref target="RFC2563"/>"
 </t>
 <t>
@@ -401,7 +401,7 @@ If the DHCPDISCOVER does not contain the Auto-Configure option but contains the 
 	       <texttable style="none">
                               <ttcol></ttcol>
 			      <ttcol></ttcol>
-			      <c>V6ONLY_WAIT</c> <c>The minimum time the client SHOULD stop the DHCPv4 configuration process for. MUST be no less than MIN_V6ONLY_WAIT seconds. Default: 1800 seconds</c>
+			      <c>V6ONLY_WAIT</c> <c>The minimum time the client SHOULD stop the DHCPv4 configuration process for. The value MUST NOT be less than MIN_V6ONLY_WAIT seconds. Default: 1800 seconds</c>
 			      <c>MIN_V6ONLY_WAIT</c> <c>The lower boundary for V6ONLY_WAIT. Value: 300 seconds</c>
 			      <c></c><c></c>
 			       </texttable>
