@@ -467,7 +467,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
     <section anchor="Acknowledgements" title="Acknowledgements">
 	    <t>
 
-		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Bernie Volz, Eric Vyncke.
+		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Russ Housley, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Bernie Volz, Eric Vyncke.
 			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts. 
 			    Special thanks to Erik Kline, Mark Townsley and Maciej Zenczykowski for the discussion which led to the idea of signalling IPv6-only capability over DHCPv4.
     </t>
