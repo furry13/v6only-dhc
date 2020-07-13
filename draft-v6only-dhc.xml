@@ -196,7 +196,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
       <section title="Terminology">
 	      <t>
 		      IPv6-only capable host: a host which does not require an IPv4 address and can operate on IPv6-only networks.
-			      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host require IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. This  document implies that IPv6-only capable hosts reach IPv4-only destinations via NAT64 service provided by the network. <xref target="v6onlydef" /> discusses hypothetical scenarios of other transition technologies being used.
+			      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host requires IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable only when connected to a NAT64 network via that interface. This document implies that IPv6-only capable hosts will reach IPv4-only destinations via NAT64 service provided by the network. <xref target="v6onlydef" /> discusses hypothetical scenarios of other transition technologies being used.
 	      </t>
 	      <t>
 		      IPv4-requiring host: a host which is not IPv6-only capable and can not operate in IPv6-only network providing NAT64 service.
