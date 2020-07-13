@@ -206,7 +206,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	      </t>
 	      <t>
 		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity and allows coexistence of IPv6-only, dual-stack and IPv4-only hosts on the same segment.
-		      Such deployment scenario allows operators to incrementally turn off IPv4 on end hosts, while still providing IPv4 to devices which require IPv4 to operate. 
+		      Such deployment scenario allows operators to incrementally turn off IPv4 on end hosts, while still providing IPv4 to devices which require IPv4 to operate.
 		      But, IPv6-only capable devices need not be assigned IPv4 addresses.
 	      </t>
 	      <t>
@@ -239,12 +239,12 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	    </t>
 	    <t>
 		    Another benefit of using DHCPv4 for signaling is that IPv4 will be disabled only if both the client and the server indicate IPv6-only capability.
-		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise. 
+		    It allows IPv6-only capable hosts to turn off IPv4 only upon receiving an explicit signal from the network and operate in dual-stack or IPv4-only mode otherwise.
 		    In addition, the proposed mechanism does not introduce any additional delays to the process of configuring IP stack on hosts.
 		    If the network does not support IPv6-only/IPv4-on-demand mode, an IPv6-only capable host would configure an IPv4 address as quickly as on any other host.
 	    </t>
 	    <t>
-			    Being a client/server protocol, DHCPv4 allows IPv4 to be selectively disabled on a per-host basis on a given network segment. 
+			    Being a client/server protocol, DHCPv4 allows IPv4 to be selectively disabled on a per-host basis on a given network segment.
 			    Coexistence of IPv6-only, dual-stack and even IPv4-only hosts on the same LAN would not only allow network administrators to preserve scarce IPv4 addresses but would also drastically simplify incremental deployment of IPv6-only networks, positively impacting IPv6 adoption.
 	    </t>
     </section>
@@ -294,7 +294,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If only a specific interface is configured as IPv6-only capable the DHCPv4 client MUST NOT consider the host to be an IPv6-only capable for the purpose of sending/receiving DHCPv4 packets over any other interfaces.
 	       </t>
 	       <t>
-		       The DHCPv4 client on an IPv4-requiring host MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCPv4 packets and MUST ignore that option in packets received from DHCPv4 servers. 
+		       The DHCPv4 client on an IPv4-requiring host MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCPv4 packets and MUST ignore that option in packets received from DHCPv4 servers.
 	       </t>
 	       <t>
 		       DHCPv4 clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option code in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
@@ -323,7 +323,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	       </t>
 	       <t>
 		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configure IPv4 link-local address <xref target="RFC3927"/>.
-		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link. 
+		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link.
 		       The Auto-Configure Option <xref target="RFC2563"/> can be used to control IPv4 link-local addresses autoconfiguration.
 		       <xref target="autoconf"/> discusses the interaction between the IPv6-only Preferred and the Auto-Configure options.
 	       </t>
@@ -420,22 +420,22 @@ In a typical deployment scenario, a network administrator would not configure th
 </t>
 <t>
 Hypothetically it is possible for multiple transition technologies to coexist. In such scenario some form of negotiation would be required between a client and a server to ensure that the transition technology supported by the client is the one the network provides.
-		However it seems unlikely that any new transition technology would arise and be widely adopted in any foreseeable future. 
+		However it seems unlikely that any new transition technology would arise and be widely adopted in any foreseeable future.
 		Therefore adding support for non-existing technologies seems to be suboptimal and the proposed mechanism implies that NAT64 is used to facilitate connectivity between IPv6 and IPv4.
-		In the unlikely event of a new transtion mechanism becomes available and widely deployed the applicability of the proposed option would depend on the nature of that new mechanism. If the new technology is designed in such a way that it's fully transparent for legacy hosts (IPv6-only capable in NAT64 envinronment ones) then the IPv6-Only Preferred option might still be used. If that hypothetical technology is not compatible with NAT64 and implementation on the host side is required to support the new mechanism then a new DHCPv4 option needs to be defined. 
+		In the unlikely event of a new transtion mechanism becomes available and widely deployed the applicability of the proposed option would depend on the nature of that new mechanism. If the new technology is designed in such a way that it's fully transparent for legacy hosts (IPv6-only capable in NAT64 envinronment ones) then the IPv6-Only Preferred option might still be used. If that hypothetical technology is not compatible with NAT64 and implementation on the host side is required to support the new mechanism then a new DHCPv4 option needs to be defined.
 </t>
 
 <t>
 It should be also noted that declaring a host or (strictly speaking, a host interface) IPv6-only capable is a policy decision. For example,
  <list style="symbols">
 <t>
-An operating system vendor may make such decision and configure their DHCPv4 clients to send the IPv6-Only Preferred option by default if the OS has 464XLAT CLAT <xref target="RFC6877"/> enabled. 
+An operating system vendor may make such decision and configure their DHCPv4 clients to send the IPv6-Only Preferred option by default if the OS has 464XLAT CLAT <xref target="RFC6877"/> enabled.
 </t>
 <t>
 An enterprise network administrator may provision the corporate hosts as IPv6-only capable if all applications users are supposed to run have been tested in IPv6-only environment (or if 464XLAT CLAT is enabled on the devices).
 </t>
 <t>
-IoT devices may be shipped in IPv6-only capable mode if they are designed to connect to IPv6-enabled cloud destination only. 
+IoT devices may be shipped in IPv6-only capable mode if they are designed to connect to IPv6-enabled cloud destination only.
 </t>
 </list>
 
@@ -445,7 +445,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 
 
     <section anchor="IANA" title="IANA Considerations">
-<t>The IANA is requested to assign a new DHCPv4 Option code for the IPv6-Only Preferred option 
+<t>The IANA is requested to assign a new DHCPv4 Option code for the IPv6-Only Preferred option
       from the BOOTP Vendor Extensions and DHCPv4 Options registry, located at
       https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml#options .
       If possible, please assign option code 108.
@@ -473,7 +473,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 	    <t>
 
 		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Russ Housley, Sheng Jiang, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
-			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts. 
+			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts.
 			    Special thanks to Erik Kline, Mark Townsley and Maciej Zenczykowski for the discussion which led to the idea of signalling IPv6-only capability over DHCPv4.
     </t>
     </section>
