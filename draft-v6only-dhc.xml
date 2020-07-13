@@ -210,7 +210,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		      But, IPv6-only capable devices need not be assigned IPv4 addresses.
 	      </t>
 	      <t>
-			      IPv6-only mode: a mode of operation when a host acts as IPv6-only capable and does not have IPv4 addresses assigned (except for IPv4 link-local address <xref target="RFC3927"/>).
+			      IPv6-only mode: a mode of operation when a host acts as an IPv6-only capable host and does not have IPv4 addresses assigned (except that IPv4 link-local addresses <xref target="RFC3927"/> may have been configured).
 	      </t>
 	      <t>
 		      IPv6-Only network: a network which does not provide routing functionality for IPv4 packets.
@@ -233,7 +233,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 
     <section title="Reasons to Signal IPv6-Only Support in DHCPv4 Packets">
 	    <t>
-			    For networks which contain both IPv6-only capable and IPv4-requiring hosts and utilize DHCPv4 for configuring the IPv4 network stack on hosts, it seems natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
+			    For networks which contain a mix of both IPv6-only capable hosts and IPv4-requiring hosts, and which utilize DHCPv4 for configuring the IPv4 network stack on hosts, it seems natural to leverage the same protocol to signal that IPv4 is discretional on a given segment.
 			    An ability to remotely disable IPv4 on a host can be seen as a new denial-of-service attack vector.
 			    The proposed approach limits the attack surface to DHCPv4-related attacks without introducing new vulnerable elements.
 	    </t>
