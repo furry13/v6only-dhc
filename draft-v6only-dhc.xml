@@ -42,7 +42,7 @@
      updates="2563"
      obsoletes=""
      category="std"
-     docName="draft-ietf-dhc-v6only-05">
+     docName="draft-ietf-dhc-v6only-06">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -274,7 +274,8 @@ If the particular network segment provides IPv4-on-demand such clients would not
                               <ttcol></ttcol>
                               <ttcol></ttcol>
 
-                              <c>Code: </c>   <c> 8-bit identifier of the IPv6-Only Preferred option code as assigned by IANA: TBD</c>
+			      <c>Code: </c>   <c> 8-bit identifier of the IPv6-Only Preferred option code as assigned by IANA: TBD.
+				      The client includes the Code in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages as described in <xref target="v4client"/>.</c>
 
                               <c>Length:</c>   <c> 8-bit unsigned integer.  The length of the option excluding the Code and Length Fields.  The server MUST set the length field to 4. The client MUST ignore the IPv6-Only Preferred option if the length field value is not 4.</c>
 			      <c>Value:</c>   <c> 32-bit unsigned integer.
@@ -464,8 +465,12 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 
     <section anchor="Security" title="Security Considerations">
 	    <t>
-		    The proposed mechanism is not introducing any new security implications.
-		    While clients using the IPv6-only Preferred option are vulnerable to attacks related to a rogue DHCPv4 server, enabling IPv6-only Preferred option does not provide an attacker with any additional mechanisms.
+			    An attacker might send a spoofed DHCPOFFER containing IPv6-only Preferred option with the value field set to 0xffffffff, disabling DHCPv4 on clients supporting the option.
+			    If the network is IPv4-only such clients would lose connectivity, while on a dual-stack network without NAT64 service only connectivity to IPv4-only destinations would be affected.
+			    The recovery would require triggering a network attachment event.
+			    However it should be noted that if the network does not provide protection from a rogue DHCPv4 server the similar attack vector can be executed by setting the Lease Time option value field to 0xffffffff.
+			    The latter attack would also affect hosts without IPv6-only Preferred option support.
+			    Therefore the security measures against rogue DHCPv4 servers would be sufficient to prevent the attacks specific to IPv6-only Preferred option.
 	    </t>
 	    <t>
 		    It should be noted that disabling IPv4 on a host upon receiving the IPv6-only Preferred  option from the DHCPv4 server protects the host from IPv4-related attacks and therefore could be considered a security feature.
@@ -474,7 +479,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
     <section anchor="Acknowledgements" title="Acknowledgements">
 	    <t>
 
-		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Russ Housley, Sheng Jiang, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
+		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Martin Duke, Russ Housley, Sheng Jiang, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
 			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts.
 			    Special thanks to Erik Kline, Mark Townsley and Maciej Zenczykowski for the discussion which led to the idea of signalling IPv6-only capability over DHCPv4.
     </t>
