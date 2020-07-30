@@ -468,8 +468,8 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 			    An attacker might send a spoofed DHCPOFFER containing IPv6-only Preferred option with the value field set to 0xffffffff, disabling DHCPv4 on clients supporting the option.
 			    If the network is IPv4-only such clients would lose connectivity, while on a dual-stack network without NAT64 service only connectivity to IPv4-only destinations would be affected.
 			    The recovery would require triggering a network attachment event.
-			    However it should be noted that if the network does not provide protection from a rogue DHCPv4 server the similar attack vector can be executed by setting the Lease Time option value field to 0xffffffff.
-			    The latter attack would also affect hosts without IPv6-only Preferred option support.
+			    However it should be noted that if the network does not provide protection from a rogue DHCPv4 server the similar attack vector can be executed by offering an invalid address and setting the Lease Time option value field to 0xffffffff. 
+			    The latter attack would affect all hosts, not just hosts that support the IPv6-only Preferred option.
 			    Therefore the security measures against rogue DHCPv4 servers would be sufficient to prevent the attacks specific to IPv6-only Preferred option.
 	    </t>
 	    <t>
