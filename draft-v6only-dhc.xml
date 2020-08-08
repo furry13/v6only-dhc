@@ -42,7 +42,7 @@
      updates="2563"
      obsoletes=""
      category="std"
-     docName="draft-ietf-dhc-v6only-06">
+     docName="draft-ietf-dhc-v6only-07">
 
   <!-- category values: std, bcp, info, exp, and historic -->
 
@@ -144,8 +144,8 @@
 
     <abstract>
 	    <t>
-			    This document specifies a DHCPv4 option to indicate that a host supports an IPv6-only mode and willing to forgo obtaining an IPv4 address if the network provides IPv6 connectivity.
-			    It also updates RFC2563 to specify the DHCPv4 server behavior when the server receives a DHCPDISCOVER not containing the Auto-Configure option.
+			    This document specifies a DHCPv4 option to indicate that a host supports an IPv6-only mode and is willing to forgo obtaining an IPv4 address if the network provides IPv6 connectivity.
+			    It also updates RFC2563 to specify the DHCPv4 server behavior when the server receives a DHCPDISCOVER not containing the Auto-Configure option but containing the new option defined in this document.
 	    </t>
     </abstract>
   </front>
@@ -282,6 +282,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 				      The number of seconds the client should disable DHCPv4 for (V6ONLY_WAIT configuration variable).
 				      If the server pool is explicitly configured with a V6ONLY_WAIT timer the server MUST set the field to that configured value. Otherwise the server MUST set it to zero.
 				      The client MUST process that field as described in <xref target="v4client"/>.
+					      The client never sets this field as it never sends the full option but includes the option code in the Parameter Request List as described in <xref target="v4client"/>.
 			      </c>
                               <c></c><c></c>
        </texttable>
@@ -307,13 +308,13 @@ If the particular network segment provides IPv4-on-demand such clients would not
 			       If the client includes the IPv6-only Preferred option in the Parameter Request List and the DHCPOFFER message from the server contains a valid IPv6-only Preferred option, the client SHOULD NOT request the IPv4 address provided in the DHCPOFFER.
 		       If the IPv6-only Preferred option returned by the server contains a value greater or equal to MIN_V6ONLY_WAIT, the client SHOULD set the V6ONLY_WAIT timer to that value.
 		       Otherwise, the client SHOULD set the V6ONLY_WAIT timer to MIN_V6ONLY_WAIT.
-		       The client SHOULD stop the DHCPv4 configuration process for at least V6ONLY_WAIT seconds or until a network attachment event happens.
-		       The host MAY disable the IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
+		       The client SHOULD stop the DHCPv4 configuration process for at least V6ONLY_WAIT seconds or until a network attachment event, whichever happens first.
+		       The host MAY disable the IPv4 stack completely for V6ONLY_WAIT seconds or until the network attachment event, whichever happens first.
 	       </t>
 	       <t>
 			       The IPv6-only Preferred option SHOULD be included in the Parameter Request List option in DHCPREQUEST messages (after receiving a DHCPOFFER without this option, for a INIT-REBOOT, or when renewing or rebinding a leased address).
 			       If the DHCPv4 server responds with a  DHCPACK that includes the IPv6-only Preferred option, the client behaviour depends on the client's state.
-			       If the client is in the INIT-REBOOT state it SHOULD stop the DHCPv4 configuration process or disable IPv4 stack completely for V6ONLY_WAIT seconds or until the network disconnection event happens.
+			       If the client is in the INIT-REBOOT state it SHOULD stop the DHCPv4 configuration process or disable IPv4 stack completely for V6ONLY_WAIT seconds or until the network event, whichever happens first.
 			       It also MAY send a DHCPRELEASE message.
 			       If the client is in any other state it SHOULD continue to use the assigned IPv4 address until further DHCPv4 reconfiguration events.
 	       </t>
@@ -470,12 +471,15 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
 
     <section anchor="Security" title="Security Considerations">
 	    <t>
-			    An attacker might send a spoofed DHCPOFFER containing IPv6-only Preferred option with the value field set to 0xffffffff, disabling DHCPv4 on clients supporting the option.
+			    An attacker might send a spoofed DHCPOFFER containing IPv6-only Preferred option with the value field set to a large number, such as 0xffffffff, effectively disabling DHCPv4 on clients supporting the option.
 			    If the network is IPv4-only such clients would lose connectivity, while on a dual-stack network without NAT64 service only connectivity to IPv4-only destinations would be affected.
 			    The recovery would require triggering a network attachment event.
 			    However it should be noted that if the network does not provide protection from a rogue DHCPv4 server the similar attack vector can be executed by offering an invalid address and setting the Lease Time option value field to 0xffffffff. 
 			    The latter attack would affect all hosts, not just hosts that support the IPv6-only Preferred option.
 			    Therefore the security measures against rogue DHCPv4 servers would be sufficient to prevent the attacks specific to IPv6-only Preferred option.
+			    Additionally such attacks can only be executed if the victim prefers the rogue DHCPOFFER over the legitimate ones. 
+			    Therefore for the attack to be successful the attacker needs to know the selection criteria used by the client and to be able to make its rogue offer more preferable.
+
 	    </t>
 	    <t>
 		    It should be noted that disabling IPv4 on a host upon receiving the IPv6-only Preferred  option from the DHCPv4 server protects the host from IPv4-related attacks and therefore could be considered a security feature.
@@ -484,7 +488,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
     <section anchor="Acknowledgements" title="Acknowledgements">
 	    <t>
 
-		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Martin Duke, Russ Housley, Sheng Jiang, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
+		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Martin Duke, Russ Housley, Sheng Jiang, Benjamin Kaduk, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
 			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts.
 			    Special thanks to Erik Kline, Mark Townsley and Maciej Zenczykowski for the discussion which led to the idea of signalling IPv6-only capability over DHCPv4.
     </t>
@@ -499,13 +503,13 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
       &RFC2131;
       &RFC2563;
       &RFC3927;
-      &RFC4861;
       &RFC4039;
       &RFC8174;
     </references>
 
     <references title="Informative References">
       <!-- &RFC6052; -->
+      &RFC4861;
       &RFC6146;
       &RFC6147;
       &RFC6877;
