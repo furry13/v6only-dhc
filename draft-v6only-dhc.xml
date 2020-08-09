@@ -299,7 +299,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       The DHCPv4 client on an IPv4-requiring host MUST NOT include the IPv6-only Preferred option in the Parameter Request List of any DHCPv4 packets and MUST ignore that option in packets received from DHCPv4 servers.
 	       </t>
 	       <t>
-		       DHCPv4 clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option code in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per interface enabled basis.
+		       DHCPv4 clients running on IPv6-only capable hosts SHOULD include the IPv6-only Preferred option code in the Parameter Request List in DHCPDISCOVER and DHCPREQUEST messages for interfaces so enabled and follow the processing as described below on a per enabled interface basis.
 	       </t>
 	       <t>
 		       If the client did not include the IPv6-only Preferred option code in the Parameter Request List option in the DHCPDISCOVER or DHCPREQUEST message it MUST ignore the IPv6-only Preferred  option in any messages received from the server.
@@ -346,7 +346,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       If the server responds with the IPv6-only Preferred option and the V6ONLY_WAIT timer is configured for the pool, the server MUST copy the configured value to the IPv6-only Preferred option value field.
 		       Otherwise it MUST set the field to zero.
 
-		       The server SHOULD NOT assign an address for the pool.
+		       The server SHOULD NOT assign an address from the pool.
 		       Instead it SHOULD return 0.0.0.0 as the offered address.
 			       Alternatively, the server MAY include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/>.
 				       In this case, the offered address MUST be a valid address that is not committed to any other client.
@@ -461,10 +461,16 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
       </t>
 
 <texttable anchor="option_table">
-    <ttcol align="left">Option Name</ttcol>
-    <ttcol align="left">Code</ttcol>
+    <ttcol align="left">Tag</ttcol>
+    <ttcol align="left">Name</ttcol>
+    <ttcol align="left">Data Length</ttcol>
+    <ttcol align="left">Meaning</ttcol>
+    <ttcol align="left">Reference</ttcol>
+    <c>TBD (proposed value: 108)</c>
     <c>IPv6-only Preferred option</c>
-    <c>(TBD)</c>
+    <c>4</c>
+    <c>Number of seconds to disable DHCPv4 for</c>
+    <c>draft-ietf-dhc-v6only</c>
 </texttable>
 
     </section>
