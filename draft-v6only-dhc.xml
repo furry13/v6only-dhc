@@ -227,6 +227,9 @@ If the particular network segment provides IPv4-on-demand such clients would not
 	      <t>
 		      DNS64: a mechanism for synthesizing AAAA records from A records <xref target="RFC6147"/>.
 	      </t>
+	      <t>
+		      network attachment event: A Link Up event, as described by <xref target="RFC4957" /> which results in a host detecting an available network.
+	      </t>
 
       </section>
     </section>
