@@ -196,13 +196,13 @@ If the particular network segment provides IPv4-on-demand such clients would not
       <section title="Terminology">
 	      <t>
 		      IPv6-only capable host: a host which does not require an IPv4 address and can operate on IPv6-only networks.
-			      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host require IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. This  document currently implies that IPv6-only capable hosts reach IPv4-only destinations via NAT64 service provided by the network. <xref target="v6onlydef" /> discusses hypothetical scenarios of other transition technologies being used.
+			      Strictly speaking IPv6-only capability is specific to a given interface of the host: if some application on a host require IPv4 and 464XLAT CLAT  <xref target="RFC6877"/> is only enabled on one interface, the host is IPv6-only capable if connected to a NAT64 network via that interface. This  document implies that IPv6-only capable hosts reach IPv4-only destinations via NAT64 service provided by the network. <xref target="v6onlydef" /> discusses hypothetical scenarios of other transition technologies being used.
 	      </t>
 	      <t>
 		      IPv4-requiring host: a host which is not IPv6-only capable and can not operate in IPv6-only network providing NAT64 service.
 	      </t>
 	      <t>
-		      IPv4-on-demand: a deployment scenario when end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in to receiving IPv4 addresses.
+		      IPv4-on-demand: a deployment scenario where end hosts are expected to operate in IPv6-only mode by default and IPv4 addresses can be assigned to some hosts if those hosts explicitly opt-in to receiving IPv4 addresses.
 	      </t>
 	      <t>
 		      IPv6-mostly network: a network which provides NAT64 (possibly with DNS64) service as well as IPv4 connectivity and allows coexistence of IPv6-only, dual-stack and IPv4-only hosts on the same segment.
@@ -326,7 +326,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 		       A client MAY use the presence of the IPv6-only Preferred option as a selection criteria.
 	       </t>
 	       <t>
-		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configure IPv4 link-local address <xref target="RFC3927"/>.
+		       When an IPv6-only capable client receives the IPv6-Only Preferred option from the server, the client MAY configurean IPv4 link-local address <xref target="RFC3927"/>.
 		       In that case IPv6-Only capable devices might still be able to communicate over IPv4 to other devices on the link.
 		       The Auto-Configure Option <xref target="RFC2563"/> can be used to control IPv4 link-local addresses autoconfiguration.
 		       <xref target="autoconf"/> discusses the interaction between the IPv6-only Preferred and the Auto-Configure options.
@@ -335,7 +335,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
        <section anchor="v4srv" title="DHCPv4 Server Behavior">
 	       <t>
 		       The DHCPv4 server SHOULD be able to configure certain pools to include the IPv6-only preferred option in DHCPv4 responses if the client included the option code in the Parameter Request List option.
-		       The DHCPv4 server MAY have a configuration option to specify V6ONLY_WAIT timer for all or individual IPv6-mostly pools.
+		       The DHCPv4 server MAY have a configuration option to specify the V6ONLY_WAIT timer for all or individual IPv6-mostly pools.
 	       </t>
 	       <t>
 		       The server MUST NOT include the IPv6-only Preferred  option in the DHCPOFFER or DHCPACK message if the YIADDR field in the message does not belong to a pool configured as IPv6-mostly.
@@ -348,7 +348,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
 
 		       The server SHOULD NOT assign an address from the pool.
 		       Instead it SHOULD return 0.0.0.0 as the offered address.
-			       Alternatively, the server MAY include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/>.
+			       Alternatively, if offering 0.0.0.0 is not feasible due to the server or network infrastructure limitations, the server MAY include an available IPv4 address from the pool into the DHCPOFFER as per recommendations in <xref target="RFC2131"/>.
 				       In this case, the offered address MUST be a valid address that is not committed to any other client.
 				       Because the client is not expected ever to request this address, the server SHOULD NOT reserve the address and SHOULD NOT verify its uniqueness.
 				       If the client then issues a DHCPREQUEST for the address, the server MUST process it per <xref target="RFC2131"/>, including replying with a DHCPACK for the address if in the meantime it has not been committed to another client.
@@ -363,7 +363,7 @@ If the particular network segment provides IPv4-on-demand such clients would not
  <section anchor="autoconf" title="Interaction with RFC2563">
 <t>
 <xref target="RFC2563"/> defines an Auto-Configure DHCPv4 option to disable IPv4 link-local address configuration for IPv4 clients. Clients can support both, neither or just one of IPv6-Only Preferred and Auto-Configure options.
-If a client sends both IPv6-Only Preferred and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on IPv6-mostly network.
+If a client sends both IPv6-Only Preferred and Auto-Configure options the network administrator can prevent the host from configuring an IPv4 link-local address on an IPv6-mostly network.
 To achieve this the server needs to send DHCPOFFER which contains a 'yiaddr' of 0x00000000, and the Auto-Configure flag saying "DoNotAutoConfigure".
 </t>
 <t>
@@ -494,7 +494,7 @@ IoT devices may be shipped in IPv6-only capable mode if they are designed to con
     <section anchor="Acknowledgements" title="Acknowledgements">
 	    <t>
 
-		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Martin Duke, Russ Housley, Sheng Jiang, Benjamin Kaduk, Ted Lemon, Roy Marples, Bjorn Mork, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
+		    Thanks to the following people (in alphabetical order) for their review and feedback: Mohamed Boucadair, Martin Duke, Russ Housley, Sheng Jiang, Benjamin Kaduk, Murray Kucherawy, Ted Lemon, Roy Marples, Bjorn Mork, Alvaro Retana, Peng Shuping, Pascal Thubert, Bernie Volz, Eric Vyncke.
 			    Authors would like to thank Bob Hinden and Brian Carpenter for the initial idea of signaling IPv6-only capability to hosts.
 			    Special thanks to Erik Kline, Mark Townsley and Maciej Zenczykowski for the discussion which led to the idea of signalling IPv6-only capability over DHCPv4.
     </t>
